@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest, HttpResponseForbidden
 from django.core.urlresolvers import reverse
 from django.shortcuts import render
+from django.db.models import Q
 from social.models import Post, Comment, User
 # Create your views here.
 
@@ -46,7 +47,10 @@ def home(request):
 		if check[0]:
 			search_terms = request.POST['search_terms']
 			#search in posts and comments
+			q_comment = Q(comment__text__icontains=search_terms)
+			q_text = Q(text__icontains=search_terms)
 			posts = Post.objects.filter(comment__text__icontains=search_terms) | Post.objects.filter(text__icontains=search_terms)
+			# posts = Post.objects.filter(q_comment | q_text)
 			posts = posts.distinct()
 		else:
 			return HttpResponseBadRequest(check[1])

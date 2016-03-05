@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 class Post(models.Model):
 	text = models.TextField()
 	poster = models.ForeignKey(User)
+	# friends = models.ForeignKey(User)
 	date_time = models.DateTimeField(auto_now=True)
 	photo = models.ImageField(null=True, blank=True)
 
