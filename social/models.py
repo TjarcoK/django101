@@ -14,3 +14,5 @@ class Comment(models.Model):
 	poster = models.ForeignKey(User)
 	post = models.ForeignKey(Post)
 	date_time = models.DateTimeField(auto_now=True)	
+	class Meta:
+		ordering = ['-date_time']
