@@ -17,6 +17,19 @@
     <div class='post' id="{{post.id}}">
       <p>{{post.text}}</p>
       <p>{{post.date_time}}</p>
+      <div class='comments'>
+          <ul>
+            {% for comment in post.comment_set.all %}
+            <li>{{comment.text}} - {{comment.poster.username}} ({{comment.date_time | timesince }}) </li>
+            {% endfor %}
+          </ul>
+      </div>
+      <form action="{% url 'social:add_comment' %}" method="post">
+        {% csrf_token %}
+        <input type='text' name='comment' required placeholder="Write your comment here..."/>
+        <input type='hidden' name='post_id' value={{post.id}} />
+        <input type='submit'/>
+      </form>
     </div>
     {% endfor %}
   </body>
