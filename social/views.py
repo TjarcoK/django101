@@ -3,12 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest, HttpResponseForbidden
 from django.core.urlresolvers import reverse
 from django.shortcuts import render
-from social.models import Post, Comment
-import logging
+from social.models import Post, Comment, User
 # Create your views here.
-
-logger = logging.getLogger(__name__)
-
 
 def index(request):
 	return render(request, 'social/index.html')
@@ -25,6 +21,22 @@ def social_login(request):
 	else:
 		return HttpResponseBadRequest(check[1])
 
+def social_register(request):
+	new_user = False
+	error = False
+	if request.method == 'POST':
+		check = _check_post_request(request, ["username", "email", "password"])
+		if check[0]:
+			try:
+				user = User.objects.create_user(request.POST['username'], request.POST['email'], request.POST['password'])
+				user.save()
+				new_user = True
+			except:
+				error = True
+		else:
+			HttpResponseBadRequest(check[1])	
+	return render(request, 'social/register.html', {'new_user': new_user, 'error': error})			
+
 @login_required
 def home(request):
 	if request.method == 'GET':
@@ -33,8 +45,9 @@ def home(request):
 		check = _check_post_request(request, ['search_terms'])
 		if check[0]:
 			search_terms = request.POST['search_terms']
-			print(search_terms)
-			posts = Post.objects.filter(text__icontains=search_terms)
+			#search in posts and comments
+			posts = Post.objects.filter(comment__text__icontains=search_terms) | Post.objects.filter(text__icontains=search_terms)
+			posts = posts.distinct()
 		else:
 			return HttpResponseBadRequest(check[1])
 	posts = posts.order_by('-date_time')
@@ -62,6 +75,7 @@ def delete_post(request, post_id):
 	else:
 		post.delete()
 		return HttpResponseRedirect(reverse('social:home'))
+
 @login_required
 def add_comment(request):
 	check = _check_post_request(request, ['comment', 'post_id'])
@@ -77,7 +91,11 @@ def add_comment(request):
 		new_comment.save()
 		return HttpResponseRedirect(reverse('social:home'))
 	else:
-		return HttpResponseBadRequest(check[1])				
+		return HttpResponseBadRequest(check[1])	
+
+@login_required
+def profile(request):
+	return render(request, 'social/profile.html', {'user': request.user})					
 
 def _check_post_request(request, keys):
 	#Check the request method

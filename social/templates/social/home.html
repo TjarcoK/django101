@@ -36,7 +36,7 @@
             <form action="{% url 'social:home' %}" method="post" id='search-bar'>
               {% csrf_token %}
               <div class='form-group'>
-                <input type='text' class='form-control' name='search_terms' required placeholder='Search in posts...'>
+                <input type='text' class='form-control' name='search_terms' required placeholder='Search in posts and comments'>
               </div>
               <button type='submit' class='btn btn-primary'>Search</button>
             </form>

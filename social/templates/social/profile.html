@@ -1,0 +1,25 @@
+<html>
+  <head>
+    {% load staticfiles %}
+    <title> Social </title>
+    <link rel="stylesheet" href="{% static 'social/bootstrap/css/bootstrap.css' %}"></link>
+    <link rel="stylesheet" href="{% static 'social/bootstrap/css/bootstrap-theme.css' %}"></link>
+  </head>
+  <body>
+  	<div class='row'>
+        <div class='col-xs-8 col-xs-offset-2'>
+        	  	<h1 class='text-center'>Profile of {{ user.username }}</h1>
+        </div>
+    </div>
+
+    <div class='row'>
+    	<div class='col-xs-8 col-xs-offset-2 user-info'>
+    		<ul class="list-unstyled">
+    			<li>Username: {{user.username}}</li>
+    			<li>E-mail: {{user.email}}</li>
+    			<li>Full name: {{user.first_name}} {{user.last_name}}</li>
+    		</ul>
+    	</div>
+    </div>
+  </body>
+</html>  	

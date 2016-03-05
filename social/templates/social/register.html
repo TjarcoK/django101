@@ -1,0 +1,57 @@
+<html>
+  <head>
+    {% load staticfiles %}
+    <title> Social -- Register </title>
+    <link rel="stylesheet" href="{% static 'social/bootstrap/css/bootstrap.css' %}"></link>
+    <link rel="stylesheet" href="{% static 'social/bootstrap/css/bootstrap-theme.css' %}"></link>
+  </head>
+  <body>
+  	<div class='row'>
+        <div class='col-xs-8 col-xs-offset-2'>
+        	  	<h1 class='text-center'>Create an account</h1>
+        </div>
+    </div>
+
+    {% if new_user %}
+    <div class='row'>
+      <div class='col-xs-8 col-xs-offset-2'>
+        <span class="label label-success" style="font-size:1.2em">Successfully created the new User!</span>
+      </div>
+    </div> 
+    {% endif %}
+
+    {% if error %}
+    <div class='row'>
+      <div class='col-xs-8 col-xs-offset-2'>
+        <span class="label label-danger" style="font-size:1.2em">There already exists a user with this username!</span>
+      </div>
+    </div> 
+    {% endif %}
+
+    <div class='row'>
+    	<div class='col-xs-8 col-xs-offset-2 user-info'>
+    		 <div class='panel panel-primary' id='new-post'>
+            <div class='panel-body'>
+              <form action="{% url 'social:register' %}" method="post" id='new-post-form'>
+              {% csrf_token %}
+                <div class='form-group'>
+                  <label for='username'>Username: </label>
+                  <input type='text' id='username' name='username' class='form-control' />
+                </div>
+                <div class='form-group'>
+                  <label for='email'>Email: </label>
+                  <input type='email' id='email' name='email' class='form-control' />
+                </div>
+                <div class='form-group'>
+                  <label for='password'>Password: </label>
+                  <input type='password' id='password' name='password' class='form-control' />
+                </div>
+                <button type='submit' class='btn btn-default'>Register</button>
+              </form>
+              <a class="btn btn-primary" href='/'> Login</a>
+            </div>
+          </div>
+    	</div>
+    </div>
+  </body>
+</html>  	
